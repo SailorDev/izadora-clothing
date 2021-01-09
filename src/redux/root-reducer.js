@@ -4,6 +4,7 @@ import { combineReducers } from 'redux';
 
 import userReducer from './user/user.reducer';
 
+// Root reducer is an obj that has property of user that point to our user = userReducer which in INITIAL_STATE > IN user.reducer
 export default combineReducers({
   user: userReducer,
 });
