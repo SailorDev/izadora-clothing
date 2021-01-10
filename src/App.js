@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
@@ -54,12 +54,28 @@ class App extends React.Component {
         <Switch>
           <Route exact path='/' component={HomePage} />
           <Route exact path='/shop' component={ShopPage} />
-          <Route exact path='/signin' component={SignInAndSignUpPage} />
+          <Route
+            exact
+            path='/signin'
+            render={() =>
+              this.props.currentUser ? (
+                <Redirect to='/' />
+              ) : (
+                <SignInAndSignUpPage />
+              )
+            }
+          />
         </Switch>
       </div>
     );
   }
 }
+
+// this to sure when sign in to render the home page.
+// destructuring user reducer
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
@@ -67,4 +83,4 @@ const mapDispatchToProps = (dispatch) => ({
 // return an object where the proper name will whatever prop we want to pass in that dispatch the new action we try to pass ==> set current user
 // dispatch : way for redux to know that whatever you passing me (obj) is going to be action object that i will going to pass to every reducer , so user action is function that gets the user but return an action Object.
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
